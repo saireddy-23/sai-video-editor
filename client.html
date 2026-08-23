@@ -89,8 +89,8 @@
         message.textContent = error.message;
         return;
       }
+      window.location.href = "/dashboard.html";
 
-      message.textContent = "Login successful!";
     });
 
     registerBtn.addEventListener("click", async () => {
