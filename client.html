@@ -1,1 +1,123 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Client Area | SAI REDDY</title><link rel="stylesheet" href="styles.css"></head><body><header class="nav"><a class="logo" href="index.html">SAI<span>REDDY</span></a><a class="btn outline" href="index.html">Back</a></header><main class="section narrow"><p class="eyebrow">CLIENT AREA</p><h1>Register / Login</h1><p class="lead">This page will be connected to Supabase authentication next.</p><form class="card form"><label>Email<input type="email" placeholder="you@example.com"></label><label>Password<input type="password" placeholder="Password"></label><button class="btn" type="button">Continue</button></form></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Area | SAI REDDY</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header class="nav">
+    <a class="logo" href="index.html">SAI<span>REDDY</span></a>
+    <a class="btn outline" href="index.html">Back</a>
+  </header>
+
+  <main class="section narrow">
+    <p class="eyebrow">CLIENT AREA</p>
+    <h1>Register / Login</h1>
+
+    <p class="lead">
+      Access your SAI REDDY client account.
+    </p>
+
+    <form class="card form" id="authForm">
+
+      <label>
+        Email
+        <input
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+          required
+        >
+      </label>
+
+      <label>
+        Password
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          minlength="6"
+          required
+        >
+      </label>
+
+      <button class="btn" type="submit">
+        Log in
+      </button>
+
+      <button class="btn outline" type="button" id="registerBtn">
+        Create account
+      </button>
+
+      <p id="message"></p>
+
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://idfvcmpgsiezwcxkvqip.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_fXxYjAJCGtxbPz7sxRoQxw_zyntHTAH";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const form = document.getElementById("authForm");
+    const registerBtn = document.getElementById("registerBtn");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      message.textContent = "Logging in...";
+
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        return;
+      }
+
+      message.textContent = "Login successful!";
+    });
+
+    registerBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        message.textContent = "Enter your email and password first.";
+        return;
+      }
+
+      message.textContent = "Creating account...";
+
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        return;
+      }
+
+      message.textContent =
+        "Account created. Check your email if confirmation is required.";
+    });
+  </script>
+
+</body>
+</html>
