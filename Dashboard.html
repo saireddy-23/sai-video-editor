@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard | SAI REDDY</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #080808;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      padding: 25px 40px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #b6ff00;
+    }
+
+    button {
+      background: #b6ff00;
+      border: 0;
+      padding: 12px 22px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 25px;
+    }
+
+    h1 {
+      font-size: 42px;
+    }
+
+    .card {
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SAI<span>REDDY</span></div>
+  <button id="logout">Log out</button>
+</header>
+
+<main>
+  <h1>Client Dashboard</h1>
+
+  <div class="card">
+    <h2>Welcome 👋</h2>
+    <p id="client-email">Loading...</p>
+  </div>
+
+  <div class="card">
+    <h2>Your Projects</h2>
+    <p>Your projects and video work will appear here.</p>
+  </div>
+
+  <div class="card">
+    <h2>Messages</h2>
+    <p>No new messages.</p>
+  </div>
+</main>
+
+<script>
+  const SUPABASE_URL = "https://idfvcmpgsiezwc...supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR-PUBLISHABLE-KEY";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  async function checkUser() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      window.location.href = "/client.html";
+      return;
+    }
+
+    document.getElementById("client-email").textContent =
+      "Signed in as: " + user.email;
+  }
+
+  document.getElementById("logout").addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = "/client.html";
+  });
+
+  checkUser();
+</script>
+
+</body>
+</html>
